@@ -48,7 +48,8 @@ This repo uses GitHub Pages to host static HTML pages. Jekyll is disabled via `.
     ├── orklys-com-v2/
     ├── project-page-v1/
     ├── project-page-v2/
-    └── you-are-screwed-campaign-v1/
+    ├── you-are-screwed-campaign-v1/
+    └── you-are-screwed-campaign-v2/
 ```
 
 **URLs:**
