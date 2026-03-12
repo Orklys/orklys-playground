@@ -1,0 +1,22 @@
+/* Hero Variations — Draft 1 */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.hero {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  border-bottom: 1px solid #eee;
+}
+
+/* Variation-specific styles */
+.hero--a {}
+.hero--b {}
+.hero--c {}

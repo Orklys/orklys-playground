@@ -1,0 +1,930 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Orklys Chat — Final Merged (V6)</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="app">
+
+  <!-- Header -->
+  <header class="header">
+    <span class="header-logo">Orklys</span>
+    <button class="header-panel-btn" id="openPanel" aria-label="Open knowledge panel" style="display:none;">
+      Context
+    </button>
+  </header>
+
+  <!-- Messages -->
+  <div class="messages-scroll" id="messagesScroll">
+    <div class="messages" id="messages">
+
+      <!-- 1. System message -->
+      <div class="msg msg-system">
+        <span>Welcome to Orklys</span>
+      </div>
+
+      <!-- 2. Assistant greeting (NO bubble) -->
+      <div class="msg msg-assistant">
+        <button class="bookmark-btn" aria-label="Bookmark this answer">
+          <svg class="bookmark-icon-outline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+          <svg class="bookmark-icon-filled" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+        </button>
+        <div class="msg-text">
+          <p>Hi there! I'm here to help you with your energy community journey. Whether you're just getting started or looking for specific legal guidance, I can help.</p>
+          <p>Tell me a bit about your community &mdash; where are you located and what stage are you at?</p>
+        </div>
+      </div>
+
+      <!-- 3. User message -->
+      <div class="msg msg-user">
+        <div class="msg-bubble">We're a group of about 150 households in Aarhus looking to set up a solar energy community. We've been talking about it for a few months but haven't formally organized yet.</div>
+      </div>
+
+      <!-- 4. Subtle data capture confirmation -->
+      <div class="msg msg-assistant">
+        <button class="bookmark-btn" aria-label="Bookmark this answer">
+          <svg class="bookmark-icon-outline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+          <svg class="bookmark-icon-filled" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+        </button>
+        <div class="msg-text">
+          <p>Great, I've noted your location, households, energy type, and current status. Our <a href="#" class="context-link" id="openContextLink">shared knowledge</a> has been updated.</p>
+        </div>
+      </div>
+
+      <!-- 5. Interactive slider -->
+      <div class="msg msg-assistant" id="sliderMsg">
+        <button class="bookmark-btn" aria-label="Bookmark this answer">
+          <svg class="bookmark-icon-outline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+          <svg class="bookmark-icon-filled" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+        </button>
+        <div class="msg-text">
+          <p>How many community members are actively involved in the planning so far?</p>
+        </div>
+        <div class="slider-card" id="sliderCard">
+          <div class="slider-value-display" id="sliderDisplay">10</div>
+          <div class="slider-track-wrap">
+            <input type="range" id="memberSlider" min="1" max="50" value="10">
+          </div>
+          <div class="slider-range-labels">
+            <span>1</span>
+            <span>50</span>
+          </div>
+          <button class="slider-submit-btn" id="sliderSubmit">Confirm</button>
+        </div>
+      </div>
+
+      <!-- 6. Completed slider -->
+      <div class="msg msg-assistant" id="completedSliderMsg" style="display:none;">
+        <div class="slider-card completed">
+          <div class="slider-completed-row">
+            <div class="check-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            </div>
+            <span id="completedSliderText">12 active members</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 7. Multiple choice -->
+      <div class="msg msg-assistant">
+        <button class="bookmark-btn" aria-label="Bookmark this answer">
+          <svg class="bookmark-icon-outline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+          <svg class="bookmark-icon-filled" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+        </button>
+        <div class="msg-text">
+          <p>What's your primary goal for the energy community?</p>
+        </div>
+        <div class="choice-group" id="choiceGroup">
+          <button class="choice-pill" data-choice="cost">Reduce energy costs</button>
+          <button class="choice-pill" data-choice="green">Go 100% renewable</button>
+          <button class="choice-pill" data-choice="independence">Energy independence</button>
+          <button class="choice-pill" data-choice="social">Build community bonds</button>
+        </div>
+      </div>
+
+      <!-- 8. Citation-enriched message (V1 style, enhanced) -->
+      <div class="msg msg-assistant bookmarked" id="citationMsg" data-bookmark-id="1">
+        <button class="bookmark-btn bookmarked" aria-label="Remove bookmark">
+          <svg class="bookmark-icon-outline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+          <svg class="bookmark-icon-filled" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+        </button>
+        <div class="msg-text">
+          <p>Under Danish law, <span class="cite-text">energy communities can be established as cooperative associations</span><span class="citation-ref" data-cite="1">1<span class="citation-tooltip"><span class="tooltip-quote">"Energy communities may be constituted as cooperative entities under Elforsyningsloven &sect;4a."</span><span class="tooltip-doc">Danish Electricity Supply Act, 2024</span><a class="tooltip-link" href="#" onclick="openPdf(event)">View document</a></span></span> with shared ownership of renewable installations. Your group of 150 households in Aarhus <span class="cite-text">qualifies for the collective self-consumption scheme</span><span class="citation-ref" data-cite="2">2<span class="citation-tooltip"><span class="tooltip-quote">"Collective self-consumption is permitted for communities within a single grid area."</span><span class="tooltip-doc">EU Renewable Energy Directive (RED II), Art. 22</span><a class="tooltip-link" href="#" onclick="openPdf(event)">View document</a></span></span>, which allows shared metering within a geographic boundary.</p>
+        </div>
+
+        <!-- 9. Collapsible Sources (inside same assistant message) -->
+        <div class="sources-block">
+          <button class="sources-toggle" id="sourcesToggle">
+            <svg class="chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+            Sources (2)
+          </button>
+          <div class="sources-list hidden" id="sourcesList">
+            <div class="source-card" onclick="openPdf(event)">
+              <div class="source-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+              </div>
+              <div class="source-info">
+                <div class="source-name">Danish Electricity Supply Act, 2024</div>
+                <div class="source-meta">PDF &middot; Section 4a &middot; Page 12</div>
+              </div>
+            </div>
+            <div class="source-card" onclick="openPdf(event)">
+              <div class="source-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+              </div>
+              <div class="source-info">
+                <div class="source-name">EU Renewable Energy Directive (RED II)</div>
+                <div class="source-meta">PDF &middot; Article 22 &middot; Page 38</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /.messages -->
+  </div><!-- /.messages-scroll -->
+
+  <!-- Input Area -->
+  <div class="input-area">
+    <div class="input-bar">
+      <textarea id="chatInput" rows="1" placeholder="Ask anything about energy communities..."></textarea>
+      <button class="send-btn" id="sendBtn" aria-label="Send">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+      </button>
+    </div>
+  </div>
+
+</div><!-- /.app -->
+
+<!-- Side Panel Backdrop -->
+<div class="panel-backdrop" id="panelBackdrop"></div>
+
+<!-- Floating side tab button -->
+<button class="knowledge-tab" id="knowledgeTab" aria-label="Open shared knowledge">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>
+  </svg>
+  <span class="knowledge-tab-label">Shared Knowledge</span>
+  <span class="knowledge-tab-count"><span class="knowledge-tab-num" id="knowledgeCount">3</span> selected</span>
+</button>
+
+<!-- Side Panel (V3 overlay style with V4 aesthetic + file uploads + knowledge toggles) -->
+<aside class="side-panel" id="sidePanel">
+  <div class="panel-header">
+    <span class="panel-title">Shared Knowledge</span>
+    <button class="panel-close" id="closePanel" aria-label="Close panel">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+  </div>
+  <div class="panel-body">
+
+    <div class="panel-description">
+      Everything selected here is shared with the assistant as context. Toggle items on or off to control what informs the conversation.
+    </div>
+
+    <!-- ===== FILES SECTION (top) ===== -->
+    <div class="panel-section-header">
+      <span>Files</span>
+    </div>
+    <div class="files-section">
+      <!-- File 1 -->
+      <div class="file-item">
+        <div class="file-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+        </div>
+        <div class="file-info">
+          <div class="file-name">energy_community_bylaws.pdf</div>
+          <div class="file-size">2.4 MB</div>
+        </div>
+        <label class="context-toggle" title="Include as knowledge">
+          <input type="checkbox" checked>
+          <span class="toggle-track"></span>
+        </label>
+      </div>
+      <!-- File 2 -->
+      <div class="file-item">
+        <div class="file-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+        </div>
+        <div class="file-info">
+          <div class="file-name">site_survey_2024.pdf</div>
+          <div class="file-size">1.1 MB</div>
+        </div>
+        <label class="context-toggle" title="Include as knowledge">
+          <input type="checkbox" checked>
+          <span class="toggle-track"></span>
+        </label>
+      </div>
+      <!-- File 3 -->
+      <div class="file-item">
+        <div class="file-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+        </div>
+        <div class="file-info">
+          <div class="file-name">aarhus_grid_connection.pdf</div>
+          <div class="file-size">856 KB</div>
+        </div>
+        <label class="context-toggle" title="Include as knowledge">
+          <input type="checkbox">
+          <span class="toggle-track"></span>
+        </label>
+      </div>
+
+      <!-- Upload drop zone -->
+      <div class="file-upload-area">
+        <div class="upload-drop-zone" id="uploadDropZone">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+          <div class="upload-drop-text">
+            Drag files here or <strong id="uploadBrowse">browse</strong>
+          </div>
+          <input type="file" id="fileInput" multiple accept=".pdf,.doc,.docx,.txt,.csv" style="display:none">
+        </div>
+      </div>
+    </div>
+
+    <div class="panel-divider"></div>
+
+    <!-- ===== BOOKMARKS SECTION (middle) ===== -->
+    <div class="panel-section-header">
+      <span>Bookmarks</span>
+      <label class="section-toggle" title="Include bookmarks as knowledge">
+        <input type="checkbox" checked id="bookmarksToggle">
+        <span class="section-toggle-track"></span>
+      </label>
+    </div>
+    <div class="bookmarks-section" id="bookmarksSection">
+      <div class="bookmarks-empty" id="bookmarksEmpty" style="display:none;">
+        Bookmark important answers to save them here
+      </div>
+      <div class="bookmarks-list" id="bookmarksList">
+        <!-- Pre-populated bookmark for demo (citation message) -->
+        <div class="bookmark-card" data-bookmark-id="1">
+          <div class="bookmark-card-header">
+            <svg class="bookmark-card-icon" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+            <button class="bookmark-remove" aria-label="Remove bookmark">&times;</button>
+          </div>
+          <div class="bookmark-preview">Under Danish law, energy communities can be established as cooperative associations with shared ownership of renewable installations. Your group of 150 households in Aarhus qualifies for the collective self-consumption scheme, which allows shared metering within a geographic boundary.</div>
+          <div class="bookmark-full" style="display:none;"></div>
+          <button class="bookmark-question-toggle">
+            <svg class="chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+            Show question
+          </button>
+          <div class="bookmark-question" style="display:none;">We're a group of about 150 households in Aarhus looking to set up a solar energy community. We've been talking about it for a few months but haven't formally organized yet.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel-divider"></div>
+
+    <!-- ===== COMMUNITY PROFILE SECTION (bottom) ===== -->
+    <div class="panel-section-header">
+      <span>Community Profile</span>
+      <label class="section-toggle" title="Include profile as knowledge">
+        <input type="checkbox" checked id="profileContextToggle">
+        <span class="section-toggle-track"></span>
+      </label>
+    </div>
+    <div class="profile-section" id="profileSection">
+      <div class="progress-section">
+        <div class="progress-label">
+          <span>Profile completeness</span>
+          <span>5 / 12</span>
+        </div>
+        <div class="progress-track">
+          <div class="progress-fill" style="width: 41.6%"></div>
+        </div>
+      </div>
+
+      <div class="panel-fields">
+        <div class="panel-field" data-field="name">
+          <div class="panel-field-left">
+            <div class="panel-field-label">Community name</div>
+            <div class="panel-field-value">Aarhus Solar Collective</div>
+            <div class="panel-field-edit"><input type="text" value="Aarhus Solar Collective"></div>
+          </div>
+          <div class="panel-field-actions">
+            <button class="panel-edit-btn">Edit</button>
+          </div>
+        </div>
+        <div class="panel-field" data-field="location">
+          <div class="panel-field-left">
+            <div class="panel-field-label">Location</div>
+            <div class="panel-field-value">Aarhus, Denmark</div>
+            <div class="panel-field-edit"><input type="text" value="Aarhus, Denmark"></div>
+          </div>
+          <div class="panel-field-actions">
+            <button class="panel-edit-btn">Edit</button>
+          </div>
+        </div>
+        <div class="panel-field" data-field="households">
+          <div class="panel-field-left">
+            <div class="panel-field-label">Households</div>
+            <div class="panel-field-value">~150</div>
+            <div class="panel-field-edit"><input type="text" value="~150"></div>
+          </div>
+          <div class="panel-field-actions">
+            <button class="panel-edit-btn">Edit</button>
+          </div>
+        </div>
+        <div class="panel-field" data-field="energy">
+          <div class="panel-field-left">
+            <div class="panel-field-label">Energy type</div>
+            <div class="panel-field-value">Solar</div>
+            <div class="panel-field-edit"><input type="text" value="Solar"></div>
+          </div>
+          <div class="panel-field-actions">
+            <button class="panel-edit-btn">Edit</button>
+          </div>
+        </div>
+        <div class="panel-field" data-field="status">
+          <div class="panel-field-left">
+            <div class="panel-field-label">Status</div>
+            <div class="panel-field-value">Early exploration</div>
+            <div class="panel-field-edit"><input type="text" value="Early exploration"></div>
+          </div>
+          <div class="panel-field-actions">
+            <button class="panel-edit-btn">Edit</button>
+          </div>
+        </div>
+        <div class="panel-field" data-field="legal">
+          <div class="panel-field-left">
+            <div class="panel-field-label">Legal structure</div>
+            <div class="panel-field-value empty">Not set</div>
+            <div class="panel-field-edit"><input type="text" value=""></div>
+          </div>
+          <div class="panel-field-actions">
+            <button class="panel-edit-btn">Edit</button>
+          </div>
+        </div>
+        <div class="panel-field" data-field="goal">
+          <div class="panel-field-left">
+            <div class="panel-field-label">Primary goal</div>
+            <div class="panel-field-value empty">Not set</div>
+            <div class="panel-field-edit"><input type="text" value=""></div>
+          </div>
+          <div class="panel-field-actions">
+            <button class="panel-edit-btn">Edit</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</aside>
+
+<!-- PDF Modal -->
+<div class="pdf-backdrop" id="pdfBackdrop">
+  <div class="pdf-modal">
+    <div class="pdf-modal-header">
+      <span class="pdf-modal-title">Document Viewer</span>
+      <button class="pdf-modal-close" id="pdfClose" aria-label="Close PDF">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div class="pdf-modal-body">
+      <div class="pdf-placeholder">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+        <p>PDF preview would render here</p>
+        <p style="font-size:0.78rem;color:var(--text-secondary)">Danish Electricity Supply Act, 2024 &mdash; Section 4a</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+(function() {
+  'use strict';
+
+  // --- DOM refs ---
+  var messagesScroll = document.getElementById('messagesScroll');
+  var chatInput = document.getElementById('chatInput');
+  var sendBtn = document.getElementById('sendBtn');
+  var openPanelBtn = document.getElementById('openPanel');
+  var closePanelBtn = document.getElementById('closePanel');
+  var panelBackdrop = document.getElementById('panelBackdrop');
+  var sidePanel = document.getElementById('sidePanel');
+  var sourcesToggle = document.getElementById('sourcesToggle');
+  var sourcesList = document.getElementById('sourcesList');
+  var memberSlider = document.getElementById('memberSlider');
+  var sliderDisplay = document.getElementById('sliderDisplay');
+  var sliderSubmit = document.getElementById('sliderSubmit');
+  var sliderMsg = document.getElementById('sliderMsg');
+  var completedSliderMsg = document.getElementById('completedSliderMsg');
+  var completedSliderText = document.getElementById('completedSliderText');
+  var choiceGroup = document.getElementById('choiceGroup');
+  var pdfBackdrop = document.getElementById('pdfBackdrop');
+  var pdfClose = document.getElementById('pdfClose');
+  var uploadDropZone = document.getElementById('uploadDropZone');
+  var fileInput = document.getElementById('fileInput');
+  var uploadBrowse = document.getElementById('uploadBrowse');
+
+  // --- Scroll to bottom ---
+  function scrollBottom() {
+    messagesScroll.scrollTop = messagesScroll.scrollHeight;
+  }
+  scrollBottom();
+
+  // --- Textarea auto-expand ---
+  chatInput.addEventListener('input', function() {
+    this.style.height = 'auto';
+    this.style.height = Math.min(this.scrollHeight, 140) + 'px';
+    sendBtn.classList.toggle('active', this.value.trim().length > 0);
+  });
+
+  // --- Send message ---
+  function sendMessage() {
+    var text = chatInput.value.trim();
+    if (!text) return;
+
+    var messagesContainer = document.getElementById('messages');
+    var msgDiv = document.createElement('div');
+    msgDiv.className = 'msg msg-user';
+    msgDiv.innerHTML = '<div class="msg-bubble">' + escapeHtml(text) + '</div>';
+    messagesContainer.appendChild(msgDiv);
+
+    chatInput.value = '';
+    chatInput.style.height = 'auto';
+    sendBtn.classList.remove('active');
+    scrollBottom();
+
+    // Typing indicator
+    var typingDiv = document.createElement('div');
+    typingDiv.className = 'msg msg-assistant';
+    typingDiv.innerHTML = '<div class="typing-indicator"><div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div></div>';
+    messagesContainer.appendChild(typingDiv);
+    scrollBottom();
+
+    // Simulated reply
+    setTimeout(function() {
+      typingDiv.remove();
+      var replyDiv = document.createElement('div');
+      replyDiv.className = 'msg msg-assistant';
+      replyDiv.innerHTML = '<button class="bookmark-btn" aria-label="Bookmark this answer"><svg class="bookmark-icon-outline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg><svg class="bookmark-icon-filled" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg></button><div class="msg-text"><p>That\'s a great question. I\'ll look into the specific regulations for your area and get back to you with detailed guidance.</p></div>';
+      messagesContainer.appendChild(replyDiv);
+      scrollBottom();
+    }, 1800);
+  }
+
+  sendBtn.addEventListener('click', sendMessage);
+  chatInput.addEventListener('keydown', function(e) {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      sendMessage();
+    }
+  });
+
+  function escapeHtml(str) {
+    var div = document.createElement('div');
+    div.textContent = str;
+    return div.innerHTML;
+  }
+
+  // --- Side Panel ---
+  function openPanel() {
+    sidePanel.classList.add('open');
+    panelBackdrop.classList.add('open');
+    knowledgeTab.classList.add('hidden');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closePanel() {
+    sidePanel.classList.remove('open');
+    panelBackdrop.classList.remove('open');
+    knowledgeTab.classList.remove('hidden');
+    document.body.style.overflow = '';
+  }
+
+  var knowledgeTab = document.getElementById('knowledgeTab');
+
+  openPanelBtn.addEventListener('click', openPanel);
+  knowledgeTab.addEventListener('click', openPanel);
+  closePanelBtn.addEventListener('click', closePanel);
+  panelBackdrop.addEventListener('click', closePanel);
+
+  // --- Panel Inline Edit (V3 style: edit button on hover) ---
+  document.querySelectorAll('.panel-edit-btn').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      var field = this.closest('.panel-field');
+      var isEditing = field.classList.contains('editing');
+
+      if (isEditing) {
+        var input = field.querySelector('.panel-field-edit input');
+        var valueEl = field.querySelector('.panel-field-value');
+        var val = input.value.trim();
+        valueEl.textContent = val || 'Not set';
+        valueEl.classList.toggle('empty', !val);
+        field.classList.remove('editing');
+        this.textContent = 'Edit';
+      } else {
+        field.classList.add('editing');
+        this.textContent = 'Save';
+        var input = field.querySelector('.panel-field-edit input');
+        input.focus();
+        input.select();
+      }
+    });
+  });
+
+  // Enter to save in panel fields
+  document.querySelectorAll('.panel-field-edit input').forEach(function(input) {
+    input.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter') {
+        this.closest('.panel-field').querySelector('.panel-edit-btn').click();
+      }
+      if (e.key === 'Escape') {
+        var field = this.closest('.panel-field');
+        field.classList.remove('editing');
+        field.querySelector('.panel-edit-btn').textContent = 'Edit';
+      }
+    });
+  });
+
+  // --- Slider ---
+  memberSlider.addEventListener('input', function() {
+    sliderDisplay.textContent = this.value;
+  });
+
+  sliderSubmit.addEventListener('click', function() {
+    var val = memberSlider.value;
+    sliderMsg.style.display = 'none';
+    completedSliderMsg.style.display = 'block';
+    completedSliderText.textContent = val + ' active members';
+    scrollBottom();
+  });
+
+  // --- Multiple Choice ---
+  choiceGroup.addEventListener('click', function(e) {
+    var pill = e.target.closest('.choice-pill');
+    if (!pill) return;
+
+    choiceGroup.querySelectorAll('.choice-pill').forEach(function(p) {
+      p.classList.remove('selected');
+    });
+    pill.classList.add('selected');
+
+    setTimeout(function() {
+      var messagesContainer = document.getElementById('messages');
+      var msgDiv = document.createElement('div');
+      msgDiv.className = 'msg msg-user';
+      msgDiv.innerHTML = '<div class="msg-bubble">' + escapeHtml(pill.textContent) + '</div>';
+      var choiceMsg = choiceGroup.closest('.msg');
+      if (choiceMsg.nextSibling) {
+        messagesContainer.insertBefore(msgDiv, choiceMsg.nextSibling);
+      } else {
+        messagesContainer.appendChild(msgDiv);
+      }
+      scrollBottom();
+    }, 300);
+  });
+
+  // --- Sources Toggle ---
+  sourcesToggle.addEventListener('click', function() {
+    sourcesList.classList.toggle('hidden');
+    sourcesToggle.classList.toggle('open');
+  });
+
+  // --- PDF Modal ---
+  window.openPdf = function(e) {
+    e.preventDefault();
+    e.stopPropagation();
+    pdfBackdrop.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  };
+
+  pdfClose.addEventListener('click', function() {
+    pdfBackdrop.classList.remove('open');
+    if (!sidePanel.classList.contains('open')) {
+      document.body.style.overflow = '';
+    }
+  });
+
+  pdfBackdrop.addEventListener('click', function(e) {
+    if (e.target === pdfBackdrop) {
+      pdfBackdrop.classList.remove('open');
+      if (!sidePanel.classList.contains('open')) {
+        document.body.style.overflow = '';
+      }
+    }
+  });
+
+  // --- "Shared knowledge" link opens panel ---
+  document.getElementById('openContextLink').addEventListener('click', function(e) {
+    e.preventDefault();
+    openPanel();
+  });
+
+  // --- File Upload: drag and drop ---
+  uploadDropZone.addEventListener('dragover', function(e) {
+    e.preventDefault();
+    this.classList.add('dragover');
+  });
+
+  uploadDropZone.addEventListener('dragleave', function(e) {
+    e.preventDefault();
+    this.classList.remove('dragover');
+  });
+
+  uploadDropZone.addEventListener('drop', function(e) {
+    e.preventDefault();
+    this.classList.remove('dragover');
+    var files = e.dataTransfer.files;
+    if (files.length > 0) {
+      addFileToList(files[0]);
+    }
+  });
+
+  // Browse button
+  uploadBrowse.addEventListener('click', function(e) {
+    e.stopPropagation();
+    fileInput.click();
+  });
+
+  uploadDropZone.addEventListener('click', function() {
+    fileInput.click();
+  });
+
+  fileInput.addEventListener('change', function() {
+    if (this.files.length > 0) {
+      addFileToList(this.files[0]);
+    }
+    this.value = '';
+  });
+
+  function addFileToList(file) {
+    var filesSection = document.querySelector('.files-section');
+    var uploadArea = filesSection.querySelector('.file-upload-area');
+
+    var fileItem = document.createElement('div');
+    fileItem.className = 'file-item';
+    fileItem.style.animation = 'msgIn 0.35s ease-out both';
+
+    var sizeStr = file.size < 1024 * 1024
+      ? Math.round(file.size / 1024) + ' KB'
+      : (file.size / (1024 * 1024)).toFixed(1) + ' MB';
+
+    fileItem.innerHTML =
+      '<div class="file-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div>' +
+      '<div class="file-info"><div class="file-name">' + escapeHtml(file.name) + '</div><div class="file-size">' + sizeStr + '</div></div>' +
+      '<label class="context-toggle" title="Include as knowledge"><input type="checkbox" checked><span class="toggle-track"></span></label>';
+
+    filesSection.insertBefore(fileItem, uploadArea);
+
+    // Update knowledge count for new file toggle
+    fileItem.querySelector('.context-toggle input').addEventListener('change', function() {
+      if (typeof updateKnowledgeCount === 'function') updateKnowledgeCount();
+    });
+    if (typeof updateKnowledgeCount === 'function') updateKnowledgeCount();
+  }
+
+  // --- Profile section context toggle ---
+  var profileToggle = document.getElementById('profileContextToggle');
+  var profileSection = document.getElementById('profileSection');
+
+  profileToggle.addEventListener('change', function() {
+    profileSection.classList.toggle('context-off', !this.checked);
+  });
+
+  // --- Bookmarks ---
+  var bookmarks = [];
+  var bookmarkIdCounter = 1; // Start at 1 since demo bookmark uses id=1
+  var bookmarksList = document.getElementById('bookmarksList');
+  var bookmarksEmpty = document.getElementById('bookmarksEmpty');
+  var bookmarksSection = document.getElementById('bookmarksSection');
+
+  // Pre-populate the demo bookmark in the data store
+  var citationMsg = document.getElementById('citationMsg');
+  if (citationMsg) {
+    var citationMsgText = citationMsg.querySelector('.msg-text');
+    var prevUser = citationMsg.previousElementSibling;
+    while (prevUser && !prevUser.classList.contains('msg-user')) {
+      prevUser = prevUser.previousElementSibling;
+    }
+    var answerHtml = citationMsgText ? citationMsgText.innerHTML : '';
+    bookmarks.push({
+      id: 1,
+      answerText: citationMsgText ? citationMsgText.textContent.trim() : '',
+      answerHtml: answerHtml,
+      questionText: prevUser ? prevUser.querySelector('.msg-bubble').textContent.trim() : '',
+      msgElement: citationMsg
+    });
+    // Populate the pre-rendered card's full content
+    var preCard = bookmarksList.querySelector('.bookmark-card[data-bookmark-id="1"]');
+    if (preCard && answerHtml) {
+      preCard.querySelector('.bookmark-full').innerHTML = answerHtml;
+    }
+  }
+
+  // Bookmark button click handler (delegated)
+  document.getElementById('messages').addEventListener('click', function(e) {
+    var btn = e.target.closest('.bookmark-btn');
+    if (!btn) return;
+
+    e.stopPropagation();
+    var msg = btn.closest('.msg-assistant');
+    if (!msg) return;
+
+    var existingId = msg.getAttribute('data-bookmark-id');
+
+    if (existingId) {
+      // Un-bookmark
+      removeBookmark(parseInt(existingId));
+    } else {
+      // Bookmark
+      bookmarkIdCounter++;
+      var id = bookmarkIdCounter;
+
+      var msgText = msg.querySelector('.msg-text');
+      if (!msgText) return;
+
+      // Find preceding user message
+      var prevSib = msg.previousElementSibling;
+      while (prevSib && !prevSib.classList.contains('msg-user')) {
+        prevSib = prevSib.previousElementSibling;
+      }
+      var questionText = prevSib ? prevSib.querySelector('.msg-bubble').textContent.trim() : '';
+
+      var bookmark = {
+        id: id,
+        answerText: msgText.textContent.trim(),
+        answerHtml: msgText.innerHTML,
+        questionText: questionText,
+        msgElement: msg
+      };
+      bookmarks.push(bookmark);
+
+      // Mark message as bookmarked
+      msg.classList.add('bookmarked');
+      msg.setAttribute('data-bookmark-id', id);
+      btn.classList.add('bookmarked');
+      btn.setAttribute('aria-label', 'Remove bookmark');
+
+      // Pulse animation
+      btn.classList.add('just-bookmarked');
+      setTimeout(function() { btn.classList.remove('just-bookmarked'); }, 400);
+
+      // Create panel card
+      createBookmarkCard(bookmark);
+      bookmarksEmpty.style.display = 'none';
+    }
+  });
+
+  function removeBookmark(id) {
+    // Remove from array
+    bookmarks = bookmarks.filter(function(b) { return b.id !== id; });
+
+    // Remove card from panel
+    var card = bookmarksList.querySelector('.bookmark-card[data-bookmark-id="' + id + '"]');
+    if (card) card.remove();
+
+    // Un-mark the message in chat
+    var msg = document.querySelector('.msg-assistant[data-bookmark-id="' + id + '"]');
+    if (msg) {
+      msg.classList.remove('bookmarked');
+      msg.removeAttribute('data-bookmark-id');
+      var btn = msg.querySelector('.bookmark-btn');
+      if (btn) {
+        btn.classList.remove('bookmarked');
+        btn.setAttribute('aria-label', 'Bookmark this answer');
+      }
+    }
+
+    // Show empty state if no bookmarks
+    if (bookmarks.length === 0) {
+      bookmarksEmpty.style.display = 'block';
+    }
+  }
+
+  function createBookmarkCard(bookmark) {
+    var card = document.createElement('div');
+    card.className = 'bookmark-card';
+    card.setAttribute('data-bookmark-id', bookmark.id);
+
+    // Truncated preview (plain text, ~120 chars)
+    var previewText = bookmark.answerText.substring(0, 150);
+    if (bookmark.answerText.length > 150) previewText += '...';
+
+    card.innerHTML =
+      '<div class="bookmark-card-header">' +
+        '<svg class="bookmark-card-icon" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>' +
+        '<button class="bookmark-remove" aria-label="Remove bookmark">&times;</button>' +
+      '</div>' +
+      '<div class="bookmark-preview">' + escapeHtml(previewText) + '</div>' +
+      '<div class="bookmark-full" style="display:none;">' + bookmark.answerHtml + '</div>' +
+      (bookmark.questionText ?
+        '<button class="bookmark-question-toggle">' +
+          '<svg class="chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>' +
+          'Show question' +
+        '</button>' +
+        '<div class="bookmark-question" style="display:none;">' + escapeHtml(bookmark.questionText) + '</div>'
+        : '');
+
+    bookmarksList.appendChild(card);
+  }
+
+  // Bookmark card interactions (delegated on panel)
+  bookmarksList.addEventListener('click', function(e) {
+    // Remove button
+    var removeBtn = e.target.closest('.bookmark-remove');
+    if (removeBtn) {
+      e.stopPropagation();
+      var card = removeBtn.closest('.bookmark-card');
+      var id = parseInt(card.getAttribute('data-bookmark-id'));
+      removeBookmark(id);
+      return;
+    }
+
+    // Question toggle
+    var qToggle = e.target.closest('.bookmark-question-toggle');
+    if (qToggle) {
+      e.stopPropagation();
+      var card = qToggle.closest('.bookmark-card');
+      var question = card.querySelector('.bookmark-question');
+      var isOpen = qToggle.classList.contains('open');
+      qToggle.classList.toggle('open');
+      question.style.display = isOpen ? 'none' : 'block';
+      // Update text — the last text node after the SVG
+      var textNodes = Array.prototype.filter.call(qToggle.childNodes, function(n) { return n.nodeType === 3; });
+      if (textNodes.length > 0) {
+        textNodes[textNodes.length - 1].textContent = isOpen ? 'Show question' : 'Hide question';
+      }
+      return;
+    }
+
+    // Card body expand/collapse
+    var card = e.target.closest('.bookmark-card');
+    if (card) {
+      card.classList.toggle('expanded');
+    }
+  });
+
+  // Bookmarks section toggle
+  var bookmarksToggle = document.getElementById('bookmarksToggle');
+  bookmarksToggle.addEventListener('change', function() {
+    bookmarksSection.classList.toggle('context-off', !this.checked);
+  });
+
+  // --- Knowledge count updater ---
+  var knowledgeCountEl = document.getElementById('knowledgeCount');
+
+  function updateKnowledgeCount() {
+    var count = 0;
+    // Count enabled file toggles
+    document.querySelectorAll('.files-section .context-toggle input').forEach(function(cb) {
+      if (cb.checked) count++;
+    });
+    // Count bookmarks (if section enabled)
+    if (bookmarksToggle.checked) {
+      count += bookmarks.length;
+    }
+    // Count profile (if section enabled)
+    if (profileToggle.checked) count++;
+    knowledgeCountEl.textContent = count;
+  }
+
+  // Listen for toggle changes
+  document.querySelectorAll('.files-section .context-toggle input').forEach(function(cb) {
+    cb.addEventListener('change', updateKnowledgeCount);
+  });
+  bookmarksToggle.addEventListener('change', updateKnowledgeCount);
+  profileToggle.addEventListener('change', updateKnowledgeCount);
+
+  // Also update when bookmarks change (hook into existing functions)
+  var origRemoveBookmark = removeBookmark;
+  removeBookmark = function(id) {
+    origRemoveBookmark(id);
+    updateKnowledgeCount();
+  };
+
+  // Update after bookmark creation
+  var origCreateBookmarkCard = createBookmarkCard;
+  createBookmarkCard = function(bookmark) {
+    origCreateBookmarkCard(bookmark);
+    updateKnowledgeCount();
+  };
+
+  // Initial count
+  updateKnowledgeCount();
+
+  // --- Escape key closes modals ---
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+      if (pdfBackdrop.classList.contains('open')) {
+        pdfBackdrop.classList.remove('open');
+        if (!sidePanel.classList.contains('open')) {
+          document.body.style.overflow = '';
+        }
+      } else if (sidePanel.classList.contains('open')) {
+        closePanel();
+      }
+    }
+  });
+
+})();
+</script>
+
+</body>
+</html>

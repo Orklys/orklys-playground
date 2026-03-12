@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Orklys Chat — Warm Conversational</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@600;700;800&family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="app">
+  <!-- ====== Chat Column ====== -->
+  <div class="chat-column">
+
+    <!-- Header -->
+    <header class="chat-header">
+      <div class="header-avatar">O</div>
+      <div class="header-info">
+        <h1>Orklys</h1>
+        <div class="header-status">Online</div>
+      </div>
+      <button class="panel-toggle" id="panelToggle" aria-label="Toggle panel">
+        <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="17" y2="6"/><line x1="3" y1="10" x2="17" y2="10"/><line x1="3" y1="14" x2="17" y2="14"/></svg>
+      </button>
+    </header>
+
+    <!-- Message Feed -->
+    <div class="chat-feed" id="chatFeed">
+
+      <!-- 1. System message -->
+      <div class="msg-row system">
+        <div class="bubble system">Welcome to Orklys &mdash; your energy community assistant</div>
+      </div>
+
+      <!-- 2. Assistant greeting -->
+      <div class="msg-row assistant">
+        <div class="msg-avatar">O</div>
+        <div class="bubble assistant">Hi there! I'm here to help you with your energy community journey. Whether you're just getting started or looking for specific legal guidance, I can help.<br><br>Tell me a bit about your community &mdash; where are you located and what stage are you at?</div>
+      </div>
+
+      <!-- 3. User message -->
+      <div class="msg-row user">
+        <div class="bubble user">We're a group of about 150 households in Aarhus looking to set up a solar energy community. We've been talking about it for a few months but haven't formally organized yet.</div>
+      </div>
+
+      <!-- 4. Data confirmation card -->
+      <div class="msg-row assistant">
+        <div class="msg-avatar">O</div>
+        <div class="bubble assistant">
+          Great, let me confirm what I've gathered so far:
+          <div class="data-card">
+            <div class="data-row"><span class="data-label">Location</span><span class="data-value">Aarhus</span></div>
+            <div class="data-row"><span class="data-label">Households</span><span class="data-value">~150</span></div>
+            <div class="data-row"><span class="data-label">Energy type</span><span class="data-value">Solar</span></div>
+            <div class="data-row"><span class="data-label">Status</span><span class="data-value">Early exploration</span></div>
+          </div>
+          <button class="btn-edit">
+            <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M8.5 1.5l3 3L4 12H1v-3z"/></svg>
+            Edit details
+          </button>
+        </div>
+      </div>
+
+      <!-- 5. Interactive slider -->
+      <div class="msg-row assistant">
+        <div class="msg-avatar">O</div>
+        <div class="bubble assistant">
+          <div class="slider-card" id="sliderCard">
+            <label>How many community members are actively involved in the planning so far?</label>
+            <div class="slider-value-display" id="sliderDisplay">10</div>
+            <input type="range" id="memberSlider" min="1" max="50" value="10">
+            <button class="btn-submit" id="sliderSubmit">Submit</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- 6. Completed slider -->
+      <div class="msg-row assistant" style="display:none;" id="sliderCompletedRow">
+        <div class="msg-avatar">O</div>
+        <div class="bubble assistant">
+          <div class="slider-completed">
+            <div class="check-icon">
+              <svg width="14" height="14" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="2 7.5 5.5 11 12 3"/></svg>
+            </div>
+            <span id="sliderResultText">12 active members</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 7. Multiple choice -->
+      <div class="msg-row assistant" id="choiceRow">
+        <div class="msg-avatar">O</div>
+        <div class="bubble assistant">
+          What's your primary motivation for creating an energy community?
+          <div class="choices" id="choicesContainer">
+            <button class="choice-btn" data-value="costs"><span class="choice-radio"></span>Lower energy costs</button>
+            <button class="choice-btn" data-value="environment"><span class="choice-radio"></span>Environmental sustainability</button>
+            <button class="choice-btn" data-value="independence"><span class="choice-radio"></span>Community independence</button>
+            <button class="choice-btn" data-value="investment"><span class="choice-radio"></span>Investment opportunity</button>
+          </div>
+          <button class="btn-submit choice-submit" id="choiceSubmit" disabled style="margin-top:10px;opacity:.5">Submit</button>
+        </div>
+      </div>
+
+      <!-- 8. Citation message -->
+      <div class="msg-row assistant">
+        <div class="msg-avatar">O</div>
+        <div class="bubble assistant">
+          Based on Danish energy community regulations, your group of 150 households in Aarhus qualifies for the collective self-consumption framework under the Electricity Supply Act<span class="citation-ref" data-citation="1" id="cite1">1
+            <div class="tooltip" id="tooltip1">
+              <div>"An energy community consists of members within a defined geographical area who jointly produce, distribute, and consume renewable energy..."</div>
+              <div class="tooltip-title">Electricity Supply Act &sect;16a</div>
+              <a class="tooltip-link" onclick="openPdfModal(event)">
+                <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 1H2a1 1 0 00-1 1v8a1 1 0 001 1h8a1 1 0 001-1V7"/><path d="M7 1h4v4"/><path d="M11 1L5 7"/></svg>
+                View document
+              </a>
+            </div>
+          </span>. This means you can share solar energy among members within certain geographical boundaries<span class="citation-ref" data-citation="2" id="cite2">2
+            <div class="tooltip" id="tooltip2">
+              <div>"Collective self-consumption is permitted when all participants are connected to the same transformer station or within a radius defined by the local grid operator..."</div>
+              <div class="tooltip-title">Danish Energy Agency Guidelines 2024, Section 4.2</div>
+              <a class="tooltip-link" onclick="openPdfModal(event)">
+                <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 1H2a1 1 0 00-1 1v8a1 1 0 001 1h8a1 1 0 001-1V7"/><path d="M7 1h4v4"/><path d="M11 1L5 7"/></svg>
+                View document
+              </a>
+            </div>
+          </span>. The recent amendments from 2024 have simplified the registration process significantly.
+
+          <!-- Sources toggle -->
+          <div style="margin-top:16px">
+            <button class="sources-toggle" id="sourcesToggle">
+              <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M2 4h10M2 7h7M2 10h10"/></svg>
+              Sources (2)
+              <span class="chevron">&#9660;</span>
+            </button>
+            <div class="sources-list collapsed" id="sourcesList">
+              <div class="source-card" onclick="openPdfModal(event)">
+                <div class="source-icon">
+                  <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><rect x="3" y="1" width="10" height="14" rx="1.5"/><line x1="6" y1="5" x2="10" y2="5"/><line x1="6" y1="8" x2="10" y2="8"/><line x1="6" y1="11" x2="8" y2="11"/></svg>
+                </div>
+                <div class="source-info">
+                  <div class="source-title">Electricity Supply Act &sect;16a</div>
+                  <div class="source-meta">Danish Parliament &middot; Energy community provisions</div>
+                </div>
+              </div>
+              <div class="source-card" onclick="openPdfModal(event)">
+                <div class="source-icon">
+                  <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><rect x="3" y="1" width="10" height="14" rx="1.5"/><line x1="6" y1="5" x2="10" y2="5"/><line x1="6" y1="8" x2="10" y2="8"/><line x1="6" y1="11" x2="8" y2="11"/></svg>
+                </div>
+                <div class="source-info">
+                  <div class="source-title">Danish Energy Agency Guidelines 2024</div>
+                  <div class="source-meta">Section 4.2 &middot; Collective self-consumption</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /chat-feed -->
+
+    <!-- Input Area -->
+    <div class="chat-input-area">
+      <div class="input-wrapper">
+        <textarea id="chatInput" rows="1" placeholder="Type a message..."></textarea>
+        <button class="send-btn" aria-label="Send">
+          <svg width="18" height="18" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="2 2 8 22 11 13 20 10"/></svg>
+        </button>
+      </div>
+    </div>
+  </div><!-- /chat-column -->
+
+  <!-- ====== Side Panel (Desktop) ====== -->
+  <aside class="side-panel" id="sidePanel">
+    <div class="panel-header">
+      <h2>Community Profile</h2>
+      <div class="completion-text">5 of 12 fields completed</div>
+      <div class="progress-bar-bg"><div class="progress-bar-fill" style="width:41.6%"></div></div>
+    </div>
+    <div class="panel-body">
+
+      <!-- Location group -->
+      <div class="field-group">
+        <div class="field-group-header">
+          <div class="group-icon">
+            <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M7 13S2 8.5 2 5.5a5 5 0 0110 0C12 8.5 7 13 7 13z"/><circle cx="7" cy="5.5" r="1.5"/></svg>
+          </div>
+          <h4>Location</h4>
+        </div>
+        <div class="field-item" data-field="location">
+          <span class="field-label">City</span>
+          <div class="field-value-wrap">
+            <span class="field-val">Aarhus</span>
+            <button class="field-edit-btn" title="Edit">
+              <svg width="11" height="11" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M7 1.5l2.5 2.5L3.5 10H1V7.5z"/></svg>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Energy group -->
+      <div class="field-group">
+        <div class="field-group-header">
+          <div class="group-icon">
+            <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="7" cy="7" r="4"/><line x1="7" y1="1" x2="7" y2="2.5"/><line x1="7" y1="11.5" x2="7" y2="13"/><line x1="1" y1="7" x2="2.5" y2="7"/><line x1="11.5" y1="7" x2="13" y2="7"/></svg>
+          </div>
+          <h4>Energy</h4>
+        </div>
+        <div class="field-item" data-field="energy">
+          <span class="field-label">Type</span>
+          <div class="field-value-wrap">
+            <span class="field-val">Solar</span>
+            <button class="field-edit-btn" title="Edit">
+              <svg width="11" height="11" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M7 1.5l2.5 2.5L3.5 10H1V7.5z"/></svg>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Community group -->
+      <div class="field-group">
+        <div class="field-group-header">
+          <div class="group-icon">
+            <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="5" cy="4" r="2.5"/><path d="M1 12c0-2.2 1.8-4 4-4s4 1.8 4 4"/><circle cx="10.5" cy="5" r="1.8"/><path d="M13 12c0-1.7-1.1-3-2.5-3"/></svg>
+          </div>
+          <h4>Community</h4>
+        </div>
+        <div class="field-item" data-field="households">
+          <span class="field-label">Households</span>
+          <div class="field-value-wrap">
+            <span class="field-val">~150</span>
+            <button class="field-edit-btn" title="Edit">
+              <svg width="11" height="11" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M7 1.5l2.5 2.5L3.5 10H1V7.5z"/></svg>
+            </button>
+          </div>
+        </div>
+        <div class="field-item" data-field="active">
+          <span class="field-label">Active members</span>
+          <div class="field-value-wrap">
+            <span class="field-val">12</span>
+            <button class="field-edit-btn" title="Edit">
+              <svg width="11" height="11" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M7 1.5l2.5 2.5L3.5 10H1V7.5z"/></svg>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Status group -->
+      <div class="field-group">
+        <div class="field-group-header">
+          <div class="group-icon">
+            <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M2 7h3l2-4 2 8 2-4h3"/></svg>
+          </div>
+          <h4>Status</h4>
+        </div>
+        <div class="field-item" data-field="status">
+          <span class="field-label">Stage</span>
+          <div class="field-value-wrap">
+            <span class="field-val">Early exploration</span>
+            <button class="field-edit-btn" title="Edit">
+              <svg width="11" height="11" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M7 1.5l2.5 2.5L3.5 10H1V7.5z"/></svg>
+            </button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </aside>
+</div><!-- /app -->
+
+<!-- ====== PDF Modal ====== -->
+<div class="modal-overlay" id="pdfModal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h3>Document Viewer</h3>
+      <button class="modal-close" id="modalClose">&times;</button>
+    </div>
+    <div class="modal-body">
+      <div class="placeholder-doc">
+        <svg fill="none" stroke="currentColor" stroke-width="1.2" viewBox="0 0 48 48"><rect x="8" y="4" width="32" height="40" rx="3"/><line x1="16" y1="14" x2="32" y2="14"/><line x1="16" y1="20" x2="32" y2="20"/><line x1="16" y1="26" x2="28" y2="26"/><line x1="16" y1="32" x2="24" y2="32"/></svg>
+        <p>PDF document placeholder</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ====== Mobile Drawer ====== -->
+<div class="drawer-overlay" id="drawerOverlay"></div>
+<div class="mobile-drawer" id="mobileDrawer">
+  <div class="drawer-handle"></div>
+  <div class="drawer-scroll" id="drawerContent">
+    <!-- Cloned panel content injected by JS -->
+  </div>
+</div>
+
+<script>
+(function() {
+  'use strict';
+
+  /* ---- Slider ---- */
+  const slider = document.getElementById('memberSlider');
+  const sliderDisplay = document.getElementById('sliderDisplay');
+  const sliderSubmit = document.getElementById('sliderSubmit');
+  const sliderCard = document.getElementById('sliderCard');
+  const sliderCompletedRow = document.getElementById('sliderCompletedRow');
+  const sliderResultText = document.getElementById('sliderResultText');
+
+  slider.addEventListener('input', function() {
+    sliderDisplay.textContent = this.value >= 50 ? '50+' : this.value;
+  });
+
+  sliderSubmit.addEventListener('click', function() {
+    const val = slider.value >= 50 ? '50+' : slider.value;
+    sliderResultText.textContent = val + ' active members';
+    sliderCard.closest('.msg-row').style.display = 'none';
+    sliderCompletedRow.style.display = 'flex';
+    sliderCompletedRow.style.opacity = '0';
+    sliderCompletedRow.style.transform = 'translateY(14px)';
+    sliderCompletedRow.style.animation = 'fadeUp .45s ease forwards';
+  });
+
+  /* ---- Multiple Choice ---- */
+  const choiceBtns = document.querySelectorAll('.choice-btn');
+  const choiceSubmit = document.getElementById('choiceSubmit');
+  let selectedChoice = null;
+
+  choiceBtns.forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      choiceBtns.forEach(function(b) { b.classList.remove('selected'); });
+      btn.classList.add('selected');
+      selectedChoice = btn.getAttribute('data-value');
+      choiceSubmit.disabled = false;
+      choiceSubmit.style.opacity = '1';
+    });
+  });
+
+  choiceSubmit.addEventListener('click', function() {
+    if (!selectedChoice) return;
+    choiceBtns.forEach(function(btn) {
+      if (!btn.classList.contains('selected')) {
+        btn.style.opacity = '.45';
+        btn.style.pointerEvents = 'none';
+      } else {
+        btn.style.borderColor = '#0a5c36';
+        btn.style.background = '#e8f5ee';
+      }
+    });
+    choiceSubmit.textContent = 'Submitted';
+    choiceSubmit.disabled = true;
+    choiceSubmit.style.opacity = '.6';
+  });
+
+  /* ---- Citation Tooltips ---- */
+  document.querySelectorAll('.citation-ref').forEach(function(ref) {
+    const tip = ref.querySelector('.tooltip');
+    ref.addEventListener('mouseenter', function() {
+      document.querySelectorAll('.tooltip.visible').forEach(function(t) { t.classList.remove('visible'); });
+      tip.classList.add('visible');
+    });
+    ref.addEventListener('mouseleave', function() {
+      tip.classList.remove('visible');
+    });
+    // Touch support
+    ref.addEventListener('click', function(e) {
+      e.stopPropagation();
+      const isVis = tip.classList.contains('visible');
+      document.querySelectorAll('.tooltip.visible').forEach(function(t) { t.classList.remove('visible'); });
+      if (!isVis) tip.classList.add('visible');
+    });
+  });
+
+  document.addEventListener('click', function() {
+    document.querySelectorAll('.tooltip.visible').forEach(function(t) { t.classList.remove('visible'); });
+  });
+
+  /* ---- Sources Toggle ---- */
+  const sourcesToggle = document.getElementById('sourcesToggle');
+  const sourcesList = document.getElementById('sourcesList');
+
+  sourcesToggle.addEventListener('click', function() {
+    const collapsed = sourcesList.classList.toggle('collapsed');
+    sourcesToggle.classList.toggle('open', !collapsed);
+  });
+
+  /* ---- PDF Modal ---- */
+  const pdfModal = document.getElementById('pdfModal');
+  const modalClose = document.getElementById('modalClose');
+
+  window.openPdfModal = function(e) {
+    e.preventDefault();
+    e.stopPropagation();
+    pdfModal.classList.add('open');
+  };
+
+  modalClose.addEventListener('click', function() {
+    pdfModal.classList.remove('open');
+  });
+
+  pdfModal.addEventListener('click', function(e) {
+    if (e.target === pdfModal) pdfModal.classList.remove('open');
+  });
+
+  /* ---- Mobile Panel Drawer ---- */
+  const panelToggle = document.getElementById('panelToggle');
+  const drawerOverlay = document.getElementById('drawerOverlay');
+  const mobileDrawer = document.getElementById('mobileDrawer');
+  const drawerContent = document.getElementById('drawerContent');
+  const sidePanel = document.getElementById('sidePanel');
+
+  // Clone panel content into drawer on load
+  drawerContent.innerHTML = sidePanel.innerHTML;
+
+  function openDrawer() {
+    drawerOverlay.classList.add('open');
+    mobileDrawer.classList.add('open');
+    // Re-attach edit handlers for cloned content
+    attachFieldEditing(drawerContent);
+  }
+
+  function closeDrawer() {
+    drawerOverlay.classList.remove('open');
+    mobileDrawer.classList.remove('open');
+  }
+
+  panelToggle.addEventListener('click', openDrawer);
+  drawerOverlay.addEventListener('click', closeDrawer);
+
+  /* ---- Auto-expanding Textarea ---- */
+  const chatInput = document.getElementById('chatInput');
+  chatInput.addEventListener('input', function() {
+    this.style.height = 'auto';
+    this.style.height = Math.min(this.scrollHeight, 120) + 'px';
+  });
+
+  /* ---- Field Editing ---- */
+  function attachFieldEditing(container) {
+    container.querySelectorAll('.field-edit-btn').forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        const item = btn.closest('.field-item');
+        const valSpan = item.querySelector('.field-val');
+        const wrap = item.querySelector('.field-value-wrap');
+        const currentVal = valSpan.textContent;
+
+        // Already editing?
+        if (item.querySelector('.field-edit-input')) return;
+
+        const input = document.createElement('input');
+        input.type = 'text';
+        input.className = 'field-edit-input';
+        input.value = currentVal;
+        valSpan.style.display = 'none';
+        btn.style.display = 'none';
+        wrap.insertBefore(input, valSpan);
+        input.focus();
+        input.select();
+
+        function commit() {
+          const newVal = input.value.trim() || currentVal;
+          valSpan.textContent = newVal;
+          valSpan.style.display = '';
+          btn.style.display = '';
+          input.remove();
+        }
+
+        input.addEventListener('blur', commit);
+        input.addEventListener('keydown', function(e) {
+          if (e.key === 'Enter') { e.preventDefault(); commit(); }
+          if (e.key === 'Escape') { input.value = currentVal; commit(); }
+        });
+      });
+    });
+  }
+
+  attachFieldEditing(sidePanel);
+
+  /* ---- Stagger animation on load ---- */
+  // The CSS handles stagger via nth-child animation-delay
+  // Just scroll to bottom after all messages animate
+  setTimeout(function() {
+    const feed = document.getElementById('chatFeed');
+    feed.scrollTop = feed.scrollHeight;
+  }, 1200);
+
+})();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Orklys Chat — Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="app">
+  <!-- ===== CHAT AREA ===== -->
+  <div class="chat-area">
+    <!-- Header -->
+    <div class="chat-header">
+      <div class="breadcrumb">
+        <span class="crumb-parent">Orklys</span>
+        <span class="sep">&#8250;</span>
+        <span>New Conversation</span>
+      </div>
+      <div class="header-right">
+        <span class="status-pill"><span class="dot"></span>Active</span>
+        <button class="panel-toggle" id="panelToggle" aria-label="Toggle panel">
+          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><line x1="3" y1="4" x2="13" y2="4"/><line x1="3" y1="8" x2="13" y2="8"/><line x1="3" y1="12" x2="13" y2="12"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Messages -->
+    <div class="messages" id="messages">
+
+      <!-- 1. System message -->
+      <div class="msg msg-system">
+        <div class="msg-bubble">Welcome to Orklys &mdash; your energy community assistant</div>
+        <span class="msg-time">Today, 10:34</span>
+      </div>
+
+      <!-- 2. Assistant greeting -->
+      <div class="msg msg-assistant">
+        <div class="msg-bubble">Hi there! I'm here to help you with your energy community journey. Whether you're just getting started or looking for specific legal guidance, I can help.<br><br>Tell me a bit about your community &mdash; where are you located and what stage are you at?</div>
+        <span class="msg-time">10:34</span>
+      </div>
+
+      <!-- 3. User message -->
+      <div class="msg msg-user">
+        <div class="msg-bubble">We're a group of about 150 households in Aarhus looking to set up a solar energy community. We've been talking about it for a few months but haven't formally organized yet.</div>
+        <span class="msg-time">10:35</span>
+      </div>
+
+      <!-- 4. Data confirmation card -->
+      <div class="msg data-card">
+        <div class="msg-bubble">
+          <div class="data-card-header">
+            <span>Community Snapshot</span>
+            <button class="data-card-edit" id="dataCardEdit">Edit</button>
+          </div>
+          <div class="data-card-row">
+            <span class="data-card-label">Location</span>
+            <span class="data-card-value">Aarhus</span>
+          </div>
+          <div class="data-card-row">
+            <span class="data-card-label">Households</span>
+            <span class="data-card-value">~150</span>
+          </div>
+          <div class="data-card-row">
+            <span class="data-card-label">Energy type</span>
+            <span class="data-card-value">Solar</span>
+          </div>
+          <div class="data-card-row">
+            <span class="data-card-label">Status</span>
+            <span class="data-card-value">Early exploration</span>
+          </div>
+        </div>
+        <span class="msg-time">10:35</span>
+      </div>
+
+      <!-- 5. Interactive slider -->
+      <div class="msg msg-slider" id="sliderMsg">
+        <div class="msg-bubble">
+          <div class="slider-label">How many community members are actively involved?</div>
+          <div class="slider-control">
+            <input type="range" id="memberSlider" min="1" max="50" value="12">
+            <span class="slider-value" id="sliderValue">12</span>
+          </div>
+          <button class="slider-submit" id="sliderSubmit">Submit</button>
+        </div>
+        <span class="msg-time">10:35</span>
+      </div>
+
+      <!-- 6. Completed slider (hidden initially) -->
+      <div class="msg slider-done" id="sliderDone" style="display:none;">
+        <div class="msg-bubble">
+          <span class="check-icon">&#10003;</span>
+          <span id="sliderDoneText">12 active members</span>
+        </div>
+        <span class="msg-time">10:36</span>
+      </div>
+
+      <!-- 7. Multiple choice 2x2 -->
+      <div class="msg msg-choices" id="choicesMsg">
+        <div class="msg-bubble">
+          <div class="choices-label">What's your primary goal right now?</div>
+          <div class="choices-grid">
+            <button class="choice-btn" data-choice="legal">Legal &amp; regulatory guidance</button>
+            <button class="choice-btn" data-choice="funding">Funding opportunities</button>
+            <button class="choice-btn" data-choice="technical">Technical planning</button>
+            <button class="choice-btn" data-choice="engagement">Member engagement</button>
+          </div>
+        </div>
+        <span class="msg-time">10:36</span>
+      </div>
+
+      <!-- 8. Citation message -->
+      <div class="msg msg-assistant msg-citation">
+        <div class="msg-bubble">
+          Based on Danish energy community regulations, your group in Aarhus is well-positioned to form a <em>Citizen Energy Community</em> (CEC) under the EU Clean Energy Package<span class="citation-ref">1<span class="citation-tooltip"><div class="citation-tooltip-quote">"Member States shall provide an enabling regulatory framework for citizen energy communities..."</div><div class="citation-tooltip-doc">EU Directive 2019/944, Art. 16</div><span class="citation-tooltip-link" data-pdf="true">View document</span></span></span>. With 150 households, you exceed the minimum threshold for collective self-consumption arrangements under Danish law<span class="citation-ref">2<span class="citation-tooltip"><div class="citation-tooltip-quote">"Communities with more than 50 members may apply for streamlined grid connection..."</div><div class="citation-tooltip-doc">Danish Energy Agency Guidelines, 2024</div><span class="citation-tooltip-link" data-pdf="true">View document</span></span></span>. I'd recommend starting with a formal association structure, which gives you legal standing to apply for grid connection permits and community energy subsidies.
+        </div>
+        <span class="msg-time">10:36</span>
+      </div>
+
+      <!-- 10. Collapsible sources -->
+      <div class="msg sources-block">
+        <button class="sources-toggle" id="sourcesToggle">
+          <span class="arrow">&#9654;</span>
+          2 sources
+        </button>
+        <div class="sources-list" id="sourcesList">
+          <div class="source-item">
+            <span class="source-num">1</span>
+            <div class="source-info">
+              <div class="source-title">EU Directive 2019/944, Article 16</div>
+              <div class="source-meta">European Parliament &middot; 2019</div>
+            </div>
+            <button class="source-view" data-pdf="true">View</button>
+          </div>
+          <div class="source-item">
+            <span class="source-num">2</span>
+            <div class="source-info">
+              <div class="source-title">Danish Energy Agency Guidelines</div>
+              <div class="source-meta">Danish Energy Agency &middot; 2024</div>
+            </div>
+            <button class="source-view" data-pdf="true">View</button>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /messages -->
+
+    <!-- Input -->
+    <div class="input-area">
+      <div class="input-row">
+        <textarea id="chatInput" placeholder="Type a message..." rows="1"></textarea>
+        <button class="send-btn" id="sendBtn" aria-label="Send">
+          <svg viewBox="0 0 20 20"><path d="M4 10l12-6-4 6 4 6-12-6z" fill="#fff" stroke="none"/></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SIDE PANEL ===== -->
+  <div class="side-panel" id="sidePanel">
+    <div class="panel-header">
+      Community Profile
+      <button class="panel-close" id="panelClose">&times;</button>
+    </div>
+
+    <!-- BASICS -->
+    <div class="section-head">Basics</div>
+    <div class="panel-field" data-field="location">
+      <span class="panel-field-label">Location</span>
+      <div class="panel-field-value">
+        <span class="field-text">Aarhus</span>
+        <button class="panel-field-edit">Edit</button>
+      </div>
+    </div>
+    <div class="panel-field" data-field="households">
+      <span class="panel-field-label">Households</span>
+      <div class="panel-field-value">
+        <span class="field-text">~150</span>
+        <button class="panel-field-edit">Edit</button>
+      </div>
+    </div>
+    <div class="panel-field" data-field="active-members">
+      <span class="panel-field-label">Active Members</span>
+      <div class="panel-field-value">
+        <span class="field-text">12</span>
+        <button class="panel-field-edit">Edit</button>
+      </div>
+    </div>
+
+    <!-- ENERGY -->
+    <div class="section-head">Energy</div>
+    <div class="panel-field" data-field="energy-type">
+      <span class="panel-field-label">Energy Type</span>
+      <div class="panel-field-value">
+        <span class="field-text">Solar</span>
+        <button class="panel-field-edit">Edit</button>
+      </div>
+    </div>
+
+    <!-- STATUS -->
+    <div class="section-head">Status</div>
+    <div class="panel-field" data-field="status">
+      <span class="panel-field-label">Current Stage</span>
+      <div class="panel-field-value">
+        <span class="field-text">Early exploration</span>
+        <button class="panel-field-edit">Edit</button>
+      </div>
+    </div>
+
+    <!-- Progress -->
+    <div class="section-head">Completion</div>
+    <div class="panel-progress">
+      <div class="progress-header">
+        <span class="progress-label">Profile progress</span>
+        <span class="progress-count" id="progressCount">5/12 complete</span>
+      </div>
+      <div class="progress-bar">
+        <div class="progress-fill" id="progressFill" style="width:41.6%"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Drawer overlay (mobile) -->
+  <div class="drawer-overlay" id="drawerOverlay"></div>
+</div>
+
+<!-- PDF Modal -->
+<div class="pdf-modal-overlay" id="pdfModal">
+  <div class="pdf-modal">
+    <div class="pdf-modal-header">
+      <span id="pdfModalTitle">Document Viewer</span>
+      <button class="pdf-modal-close" id="pdfModalClose">&times;</button>
+    </div>
+    <div class="pdf-modal-body">
+      <div class="pdf-placeholder">
+        <div class="pdf-placeholder-icon">&#128196;</div>
+        <div class="pdf-placeholder-title" id="pdfDocName">EU Directive 2019/944</div>
+        <div class="pdf-placeholder-meta">PDF document &middot; 42 pages</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+(function() {
+  'use strict';
+
+  // ===== SLIDER =====
+  const slider = document.getElementById('memberSlider');
+  const sliderVal = document.getElementById('sliderValue');
+  const sliderSubmit = document.getElementById('sliderSubmit');
+  const sliderMsg = document.getElementById('sliderMsg');
+  const sliderDone = document.getElementById('sliderDone');
+  const sliderDoneText = document.getElementById('sliderDoneText');
+
+  slider.addEventListener('input', function() {
+    sliderVal.textContent = this.value >= 50 ? '50+' : this.value;
+  });
+
+  sliderSubmit.addEventListener('click', function() {
+    const val = slider.value >= 50 ? '50+' : slider.value;
+    sliderDoneText.textContent = val + ' active members';
+    sliderMsg.style.display = 'none';
+    sliderDone.style.display = '';
+    // Update panel
+    const amField = document.querySelector('[data-field="active-members"] .field-text');
+    if (amField) amField.textContent = val;
+  });
+
+  // ===== CHOICES =====
+  const choiceBtns = document.querySelectorAll('.choice-btn');
+  choiceBtns.forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      choiceBtns.forEach(function(b) { b.classList.remove('selected'); });
+      btn.classList.add('selected');
+    });
+  });
+
+  // ===== SOURCES TOGGLE =====
+  const sourcesToggle = document.getElementById('sourcesToggle');
+  const sourcesList = document.getElementById('sourcesList');
+
+  sourcesToggle.addEventListener('click', function() {
+    this.classList.toggle('open');
+    sourcesList.classList.toggle('show');
+  });
+
+  // ===== PDF MODAL =====
+  const pdfModal = document.getElementById('pdfModal');
+  const pdfModalClose = document.getElementById('pdfModalClose');
+  const pdfDocName = document.getElementById('pdfDocName');
+
+  function openPdf(title) {
+    pdfDocName.textContent = title || 'Document';
+    pdfModal.classList.add('show');
+  }
+
+  function closePdf() {
+    pdfModal.classList.remove('show');
+  }
+
+  pdfModalClose.addEventListener('click', closePdf);
+  pdfModal.addEventListener('click', function(e) {
+    if (e.target === pdfModal) closePdf();
+  });
+
+  // Citation tooltip "View document" links
+  document.querySelectorAll('.citation-tooltip-link[data-pdf]').forEach(function(link) {
+    link.addEventListener('click', function(e) {
+      e.stopPropagation();
+      var doc = this.closest('.citation-tooltip').querySelector('.citation-tooltip-doc');
+      openPdf(doc ? doc.textContent : 'Document');
+    });
+  });
+
+  // Source "View" buttons
+  document.querySelectorAll('.source-view[data-pdf]').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      var title = this.closest('.source-item').querySelector('.source-title');
+      openPdf(title ? title.textContent : 'Document');
+    });
+  });
+
+  // ===== SIDE PANEL DRAWER (mobile) =====
+  const sidePanel = document.getElementById('sidePanel');
+  const panelToggle = document.getElementById('panelToggle');
+  const panelClose = document.getElementById('panelClose');
+  const drawerOverlay = document.getElementById('drawerOverlay');
+
+  function openPanel() {
+    sidePanel.classList.add('open');
+    drawerOverlay.classList.add('show');
+  }
+  function closePanel() {
+    sidePanel.classList.remove('open');
+    drawerOverlay.classList.remove('show');
+  }
+
+  panelToggle.addEventListener('click', openPanel);
+  panelClose.addEventListener('click', closePanel);
+  drawerOverlay.addEventListener('click', closePanel);
+
+  // ===== INLINE EDIT (side panel) =====
+  document.querySelectorAll('.panel-field-edit').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      var field = this.closest('.panel-field');
+      var valueEl = field.querySelector('.panel-field-value');
+      var textEl = field.querySelector('.field-text');
+      var currentVal = textEl.textContent;
+
+      var input = document.createElement('input');
+      input.type = 'text';
+      input.className = 'panel-field-input';
+      input.value = currentVal;
+
+      valueEl.innerHTML = '';
+      valueEl.appendChild(input);
+      input.focus();
+      input.select();
+
+      function save() {
+        var newVal = input.value.trim() || currentVal;
+        valueEl.innerHTML = '<span class="field-text">' + newVal + '</span><button class="panel-field-edit">Edit</button>';
+        // Re-attach edit listener
+        valueEl.querySelector('.panel-field-edit').addEventListener('click', arguments.callee);
+        // Re-bind save to new edit btn — handled by event delegation below
+      }
+
+      input.addEventListener('blur', save);
+      input.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') { input.blur(); }
+        if (e.key === 'Escape') { input.value = currentVal; input.blur(); }
+      });
+    });
+  });
+
+  // Event delegation for dynamically re-created Edit buttons
+  document.getElementById('sidePanel').addEventListener('click', function(e) {
+    if (e.target.classList.contains('panel-field-edit')) {
+      var field = e.target.closest('.panel-field');
+      var valueEl = field.querySelector('.panel-field-value');
+      var textEl = field.querySelector('.field-text');
+      var currentVal = textEl.textContent;
+
+      var input = document.createElement('input');
+      input.type = 'text';
+      input.className = 'panel-field-input';
+      input.value = currentVal;
+
+      valueEl.innerHTML = '';
+      valueEl.appendChild(input);
+      input.focus();
+      input.select();
+
+      function save() {
+        var newVal = input.value.trim() || currentVal;
+        valueEl.innerHTML = '<span class="field-text">' + newVal + '</span><button class="panel-field-edit">Edit</button>';
+      }
+
+      input.addEventListener('blur', save);
+      input.addEventListener('keydown', function(ev) {
+        if (ev.key === 'Enter') input.blur();
+        if (ev.key === 'Escape') { input.value = currentVal; input.blur(); }
+      });
+    }
+  });
+
+  // ===== TEXTAREA AUTO-HEIGHT + SEND =====
+  const chatInput = document.getElementById('chatInput');
+  const sendBtn = document.getElementById('sendBtn');
+  const messagesEl = document.getElementById('messages');
+
+  chatInput.addEventListener('input', function() {
+    this.style.height = '28px';
+    this.style.height = Math.min(this.scrollHeight, 80) + 'px';
+  });
+
+  function sendMessage() {
+    var text = chatInput.value.trim();
+    if (!text) return;
+
+    var now = new Date();
+    var h = now.getHours().toString().padStart(2, '0');
+    var m = now.getMinutes().toString().padStart(2, '0');
+    var ts = h + ':' + m;
+
+    var msgDiv = document.createElement('div');
+    msgDiv.className = 'msg msg-user';
+    msgDiv.innerHTML = '<div class="msg-bubble">' + escapeHtml(text) + '</div><span class="msg-time">' + ts + '</span>';
+    messagesEl.appendChild(msgDiv);
+    messagesEl.scrollTop = messagesEl.scrollHeight;
+
+    chatInput.value = '';
+    chatInput.style.height = '28px';
+  }
+
+  sendBtn.addEventListener('click', sendMessage);
+  chatInput.addEventListener('keydown', function(e) {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      sendMessage();
+    }
+  });
+
+  function escapeHtml(str) {
+    var div = document.createElement('div');
+    div.textContent = str;
+    return div.innerHTML;
+  }
+
+  // ===== DATA CARD EDIT =====
+  document.getElementById('dataCardEdit').addEventListener('click', function() {
+    var rows = document.querySelectorAll('.data-card-value');
+    rows.forEach(function(cell) {
+      var current = cell.textContent;
+      var input = document.createElement('input');
+      input.type = 'text';
+      input.className = 'panel-field-input';
+      input.value = current;
+      input.style.fontSize = '12px';
+      input.style.padding = '1px 4px';
+      cell.innerHTML = '';
+      cell.appendChild(input);
+
+      function saveCell() {
+        cell.textContent = input.value.trim() || current;
+      }
+      input.addEventListener('blur', saveCell);
+      input.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') input.blur();
+        if (e.key === 'Escape') { input.value = current; input.blur(); }
+      });
+    });
+    if (rows.length > 0) rows[0].querySelector('input').focus();
+  });
+
+  // Scroll to bottom on load
+  messagesEl.scrollTop = messagesEl.scrollHeight;
+
+})();
+</script>
+</body>
+</html>

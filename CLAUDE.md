@@ -48,6 +48,7 @@ This repo uses GitHub Pages to host static HTML pages. Jekyll is disabled via `.
     ├── orklys-com-v2/
     ├── project-page-v1/
     ├── project-page-v2/
+    ├── chat-ui-v1/
     ├── you-are-screwed-campaign-v1/
     └── you-are-screwed-campaign-v2/
 ```
@@ -63,6 +64,9 @@ This repo uses GitHub Pages to host static HTML pages. Jekyll is disabled via `.
   - `aarhus-demo/` — Aarhus demo project
   - `orklys-com/` — Main website project
   - `project-page/` — Community project page template
+  - `chat-ui/` — Chat UI variations for the company
+  - `interactive-map/` — Interactive SVG map of Denmark's 98 municipalities
+  - `hero-variations/` — Hero section variations for the landing page
   - `you-are-screwed-campaign/` — Campaign project
 - `pages/` — Published, vetted pages for GitHub Pages hosting
 - `reference/` — Design system and reference documentation

@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Orklys Chat — Full-Bleed Immersive</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,400&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="app">
+
+  <!-- Header -->
+  <header class="header">
+    <span class="header-logo">Orklys</span>
+    <button class="header-panel-btn" id="openPanel" aria-label="Open profile panel">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="8" r="4"/><path d="M4 21v-1a6 6 0 0 1 12 0v1"/>
+        <line x1="20" y1="8" x2="20" y2="14"/><line x1="17" y1="11" x2="23" y2="11"/>
+      </svg>
+    </button>
+  </header>
+
+  <!-- Messages -->
+  <div class="messages-scroll" id="messagesScroll">
+    <div class="messages" id="messages">
+
+      <!-- 1. System message -->
+      <div class="msg msg-system">
+        <span>Welcome to Orklys</span>
+      </div>
+
+      <!-- 2. Assistant greeting (NO bubble) -->
+      <div class="msg msg-assistant">
+        <div class="msg-text">
+          <p>Hi there! I'm here to help you with your energy community journey. Whether you're just getting started or looking for specific legal guidance, I can help.</p>
+          <p>Tell me a bit about your community — where are you located and what stage are you at?</p>
+        </div>
+      </div>
+
+      <!-- 3. User message -->
+      <div class="msg msg-user">
+        <div class="msg-bubble">We're a group of about 150 households in Aarhus looking to set up a solar energy community. We've been talking about it for a few months but haven't formally organized yet.</div>
+      </div>
+
+      <!-- 4. Data confirmation card -->
+      <div class="msg msg-assistant">
+        <div class="msg-text">
+          <p>Great, I've captured the key details about your community:</p>
+        </div>
+        <div class="data-card">
+          <div class="field">
+            <span class="field-label">Location</span>
+            <span class="field-value">Aarhus</span>
+          </div>
+          <div class="field">
+            <span class="field-label">Households</span>
+            <span class="field-value">~150</span>
+          </div>
+          <div class="field">
+            <span class="field-label">Energy type</span>
+            <span class="field-value">Solar</span>
+          </div>
+          <div class="field">
+            <span class="field-label">Status</span>
+            <span class="field-value">Early exploration</span>
+          </div>
+          <div class="data-card-footer">
+            <a href="#" id="editDataCard">Edit</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- 5. Interactive slider -->
+      <div class="msg msg-assistant">
+        <div class="msg-text">
+          <p>How many community members are actively involved in the planning so far?</p>
+        </div>
+        <div class="slider-card" id="sliderCard">
+          <div class="slider-value-display" id="sliderDisplay">10</div>
+          <div class="slider-track-wrap">
+            <input type="range" id="memberSlider" min="1" max="50" value="10">
+          </div>
+          <div class="slider-range-labels">
+            <span>1</span>
+            <span>50</span>
+          </div>
+          <button class="slider-submit-btn" id="sliderSubmit">Confirm</button>
+        </div>
+      </div>
+
+      <!-- 6. Completed slider -->
+      <div class="msg msg-assistant" id="completedSliderMsg" style="display:none;">
+        <div class="slider-card completed">
+          <div class="slider-completed-row">
+            <div class="check-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            </div>
+            <span id="completedSliderText">12 active members</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 7. Multiple choice -->
+      <div class="msg msg-assistant">
+        <div class="msg-text">
+          <p>What's your primary goal for the energy community?</p>
+        </div>
+        <div class="choice-group" id="choiceGroup">
+          <button class="choice-pill" data-choice="cost">Reduce energy costs</button>
+          <button class="choice-pill" data-choice="green">Go 100% renewable</button>
+          <button class="choice-pill" data-choice="independence">Energy independence</button>
+          <button class="choice-pill" data-choice="social">Build community bonds</button>
+        </div>
+      </div>
+
+      <!-- 8. Citation message -->
+      <div class="msg msg-assistant">
+        <div class="msg-text">
+          <p>Under Danish law, energy communities can be established as cooperative associations with shared ownership of renewable installations.<span class="citation-ref" data-cite="1">1<span class="citation-tooltip"><div class="tooltip-quote">"Energy communities may be constituted as cooperative entities under Elforsyningsloven &sect;4a..."</div><div class="tooltip-doc">Danish Electricity Supply Act, 2024</div><a class="tooltip-link" href="#" onclick="openPdf(event)">View source</a></span></span> Your group of 150 households in Aarhus qualifies for the collective self-consumption scheme, which allows shared metering within a geographic boundary.<span class="citation-ref" data-cite="2">2<span class="citation-tooltip"><div class="tooltip-quote">"Collective self-consumption is permitted for communities within a single grid area..."</div><div class="tooltip-doc">EU Renewable Energy Directive (RED II), Art. 22</div><a class="tooltip-link" href="#" onclick="openPdf(event)">View source</a></span></span></p>
+        </div>
+
+        <!-- 10. Collapsible Sources -->
+        <div class="sources-block">
+          <button class="sources-toggle" id="sourcesToggle">
+            <svg class="chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+            Sources (2)
+          </button>
+          <div class="sources-list hidden" id="sourcesList">
+            <div class="source-card" onclick="openPdf(event)">
+              <div class="source-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+              </div>
+              <div class="source-info">
+                <div class="source-name">Danish Electricity Supply Act, 2024</div>
+                <div class="source-meta">PDF &middot; Section 4a &middot; Page 12</div>
+              </div>
+            </div>
+            <div class="source-card" onclick="openPdf(event)">
+              <div class="source-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+              </div>
+              <div class="source-info">
+                <div class="source-name">EU Renewable Energy Directive (RED II)</div>
+                <div class="source-meta">PDF &middot; Article 22 &middot; Page 38</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /.messages -->
+  </div><!-- /.messages-scroll -->
+
+  <!-- Input Area -->
+  <div class="input-area">
+    <div class="input-bar">
+      <textarea id="chatInput" rows="1" placeholder="Ask anything about energy communities..."></textarea>
+      <button class="send-btn" id="sendBtn" aria-label="Send">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+      </button>
+    </div>
+  </div>
+
+</div><!-- /.app -->
+
+<!-- Side Panel Backdrop -->
+<div class="panel-backdrop" id="panelBackdrop"></div>
+
+<!-- Side Panel -->
+<aside class="side-panel" id="sidePanel">
+  <div class="panel-header">
+    <span class="panel-title">Community Profile</span>
+    <button class="panel-close" id="closePanel" aria-label="Close panel">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+  </div>
+  <div class="panel-body">
+    <div class="progress-section">
+      <div class="progress-label">
+        <span>Profile completeness</span>
+        <span>5 / 12</span>
+      </div>
+      <div class="progress-track">
+        <div class="progress-fill" style="width: 41.6%"></div>
+      </div>
+    </div>
+
+    <div class="panel-fields">
+      <div class="panel-field" data-field="name">
+        <div>
+          <div class="panel-field-label">Community name</div>
+          <div class="panel-field-value">Aarhus Solar Collective</div>
+          <div class="panel-field-edit"><input type="text" value="Aarhus Solar Collective"></div>
+        </div>
+        <button class="panel-edit-btn">Edit</button>
+      </div>
+      <div class="panel-field" data-field="location">
+        <div>
+          <div class="panel-field-label">Location</div>
+          <div class="panel-field-value">Aarhus, Denmark</div>
+          <div class="panel-field-edit"><input type="text" value="Aarhus, Denmark"></div>
+        </div>
+        <button class="panel-edit-btn">Edit</button>
+      </div>
+      <div class="panel-field" data-field="households">
+        <div>
+          <div class="panel-field-label">Households</div>
+          <div class="panel-field-value">~150</div>
+          <div class="panel-field-edit"><input type="text" value="~150"></div>
+        </div>
+        <button class="panel-edit-btn">Edit</button>
+      </div>
+      <div class="panel-field" data-field="energy">
+        <div>
+          <div class="panel-field-label">Energy type</div>
+          <div class="panel-field-value">Solar</div>
+          <div class="panel-field-edit"><input type="text" value="Solar"></div>
+        </div>
+        <button class="panel-edit-btn">Edit</button>
+      </div>
+      <div class="panel-field" data-field="status">
+        <div>
+          <div class="panel-field-label">Status</div>
+          <div class="panel-field-value">Early exploration</div>
+          <div class="panel-field-edit"><input type="text" value="Early exploration"></div>
+        </div>
+        <button class="panel-edit-btn">Edit</button>
+      </div>
+      <div class="panel-field" data-field="legal">
+        <div>
+          <div class="panel-field-label">Legal structure</div>
+          <div class="panel-field-value empty">Not set</div>
+          <div class="panel-field-edit"><input type="text" value=""></div>
+        </div>
+        <button class="panel-edit-btn">Edit</button>
+      </div>
+      <div class="panel-field" data-field="goal">
+        <div>
+          <div class="panel-field-label">Primary goal</div>
+          <div class="panel-field-value empty">Not set</div>
+          <div class="panel-field-edit"><input type="text" value=""></div>
+        </div>
+        <button class="panel-edit-btn">Edit</button>
+      </div>
+    </div>
+  </div>
+</aside>
+
+<!-- PDF Modal -->
+<div class="pdf-backdrop" id="pdfBackdrop">
+  <div class="pdf-modal">
+    <div class="pdf-modal-header">
+      <span class="pdf-modal-title">Document Viewer</span>
+      <button class="pdf-modal-close" id="pdfClose" aria-label="Close PDF">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div class="pdf-modal-body">
+      <div class="pdf-placeholder">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+        <p>PDF preview would render here</p>
+        <p style="font-size:0.78rem;color:var(--text-secondary)">Danish Electricity Supply Act, 2024 &mdash; Section 4a</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+(function() {
+  // --- DOM refs ---
+  const messagesScroll = document.getElementById('messagesScroll');
+  const chatInput = document.getElementById('chatInput');
+  const sendBtn = document.getElementById('sendBtn');
+  const openPanelBtn = document.getElementById('openPanel');
+  const closePanelBtn = document.getElementById('closePanel');
+  const panelBackdrop = document.getElementById('panelBackdrop');
+  const sidePanel = document.getElementById('sidePanel');
+  const sourcesToggle = document.getElementById('sourcesToggle');
+  const sourcesList = document.getElementById('sourcesList');
+  const memberSlider = document.getElementById('memberSlider');
+  const sliderDisplay = document.getElementById('sliderDisplay');
+  const sliderSubmit = document.getElementById('sliderSubmit');
+  const sliderCard = document.getElementById('sliderCard');
+  const completedSliderMsg = document.getElementById('completedSliderMsg');
+  const completedSliderText = document.getElementById('completedSliderText');
+  const choiceGroup = document.getElementById('choiceGroup');
+  const pdfBackdrop = document.getElementById('pdfBackdrop');
+  const pdfClose = document.getElementById('pdfClose');
+
+  // Scroll to bottom
+  function scrollBottom() {
+    messagesScroll.scrollTop = messagesScroll.scrollHeight;
+  }
+  scrollBottom();
+
+  // --- Textarea auto-expand ---
+  chatInput.addEventListener('input', function() {
+    this.style.height = 'auto';
+    this.style.height = Math.min(this.scrollHeight, 140) + 'px';
+    sendBtn.classList.toggle('active', this.value.trim().length > 0);
+  });
+
+  // --- Send message ---
+  function sendMessage() {
+    const text = chatInput.value.trim();
+    if (!text) return;
+
+    const messagesContainer = document.getElementById('messages');
+
+    // Create user message
+    const msgDiv = document.createElement('div');
+    msgDiv.className = 'msg msg-user';
+    msgDiv.innerHTML = '<div class="msg-bubble">' + escapeHtml(text) + '</div>';
+    messagesContainer.appendChild(msgDiv);
+
+    chatInput.value = '';
+    chatInput.style.height = 'auto';
+    sendBtn.classList.remove('active');
+    scrollBottom();
+
+    // Typing indicator
+    const typingDiv = document.createElement('div');
+    typingDiv.className = 'msg msg-assistant';
+    typingDiv.innerHTML = '<div class="typing-indicator"><div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div></div>';
+    messagesContainer.appendChild(typingDiv);
+    scrollBottom();
+
+    // Simulate reply
+    setTimeout(function() {
+      typingDiv.remove();
+      const replyDiv = document.createElement('div');
+      replyDiv.className = 'msg msg-assistant';
+      replyDiv.innerHTML = '<div class="msg-text"><p>That\'s a great question. I\'ll look into the specific regulations for your area and get back to you with detailed guidance.</p></div>';
+      messagesContainer.appendChild(replyDiv);
+      scrollBottom();
+    }, 1800);
+  }
+
+  sendBtn.addEventListener('click', sendMessage);
+  chatInput.addEventListener('keydown', function(e) {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      sendMessage();
+    }
+  });
+
+  function escapeHtml(str) {
+    var div = document.createElement('div');
+    div.textContent = str;
+    return div.innerHTML;
+  }
+
+  // --- Side Panel ---
+  function openPanel() {
+    sidePanel.classList.add('open');
+    panelBackdrop.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closePanel() {
+    sidePanel.classList.remove('open');
+    panelBackdrop.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  openPanelBtn.addEventListener('click', openPanel);
+  closePanelBtn.addEventListener('click', closePanel);
+  panelBackdrop.addEventListener('click', closePanel);
+
+  // --- Panel Inline Edit ---
+  document.querySelectorAll('.panel-edit-btn').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      var field = this.closest('.panel-field');
+      var isEditing = field.classList.contains('editing');
+
+      if (isEditing) {
+        var input = field.querySelector('.panel-field-edit input');
+        var valueEl = field.querySelector('.panel-field-value');
+        var val = input.value.trim();
+        valueEl.textContent = val || 'Not set';
+        valueEl.classList.toggle('empty', !val);
+        field.classList.remove('editing');
+        this.textContent = 'Edit';
+      } else {
+        field.classList.add('editing');
+        this.textContent = 'Save';
+        var input = field.querySelector('.panel-field-edit input');
+        input.focus();
+        input.select();
+      }
+    });
+  });
+
+  // Enter to save in panel fields
+  document.querySelectorAll('.panel-field-edit input').forEach(function(input) {
+    input.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter') {
+        this.closest('.panel-field').querySelector('.panel-edit-btn').click();
+      }
+    });
+  });
+
+  // --- Slider ---
+  memberSlider.addEventListener('input', function() {
+    sliderDisplay.textContent = this.value;
+  });
+
+  sliderSubmit.addEventListener('click', function() {
+    var val = memberSlider.value;
+    sliderCard.parentElement.style.display = 'none';
+    completedSliderMsg.style.display = 'block';
+    completedSliderText.textContent = val + ' active members';
+    scrollBottom();
+  });
+
+  // --- Multiple Choice ---
+  choiceGroup.addEventListener('click', function(e) {
+    var pill = e.target.closest('.choice-pill');
+    if (!pill) return;
+
+    // Deselect others
+    choiceGroup.querySelectorAll('.choice-pill').forEach(function(p) {
+      p.classList.remove('selected');
+    });
+    pill.classList.add('selected');
+
+    // After short delay, show as user message
+    setTimeout(function() {
+      var messagesContainer = document.getElementById('messages');
+      var msgDiv = document.createElement('div');
+      msgDiv.className = 'msg msg-user';
+      msgDiv.innerHTML = '<div class="msg-bubble">' + escapeHtml(pill.textContent) + '</div>';
+      // Insert after the choice group's parent msg
+      var choiceMsg = choiceGroup.closest('.msg');
+      if (choiceMsg.nextSibling) {
+        messagesContainer.insertBefore(msgDiv, choiceMsg.nextSibling);
+      } else {
+        messagesContainer.appendChild(msgDiv);
+      }
+      scrollBottom();
+    }, 300);
+  });
+
+  // --- Sources Toggle ---
+  sourcesToggle.addEventListener('click', function() {
+    var isOpen = !sourcesList.classList.contains('hidden');
+    sourcesList.classList.toggle('hidden');
+    sourcesToggle.classList.toggle('open');
+  });
+
+  // --- PDF Modal ---
+  window.openPdf = function(e) {
+    e.preventDefault();
+    e.stopPropagation();
+    pdfBackdrop.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  };
+
+  pdfClose.addEventListener('click', function() {
+    pdfBackdrop.classList.remove('open');
+    if (!sidePanel.classList.contains('open')) {
+      document.body.style.overflow = '';
+    }
+  });
+
+  pdfBackdrop.addEventListener('click', function(e) {
+    if (e.target === pdfBackdrop) {
+      pdfBackdrop.classList.remove('open');
+      if (!sidePanel.classList.contains('open')) {
+        document.body.style.overflow = '';
+      }
+    }
+  });
+
+  // --- Edit data card link ---
+  document.getElementById('editDataCard').addEventListener('click', function(e) {
+    e.preventDefault();
+    openPanel();
+  });
+
+  // --- Escape key closes modals ---
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+      if (pdfBackdrop.classList.contains('open')) {
+        pdfBackdrop.classList.remove('open');
+        if (!sidePanel.classList.contains('open')) {
+          document.body.style.overflow = '';
+        }
+      } else if (sidePanel.classList.contains('open')) {
+        closePanel();
+      }
+    }
+  });
+
+})();
+</script>
+
+</body>
+</html>
